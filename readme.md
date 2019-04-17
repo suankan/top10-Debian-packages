@@ -109,15 +109,15 @@ for each line:
 
 In the end, our dict `packages` will have all the packages from Contents index and number of files for each of them
 
-=====================
-package_1: num_files_1
-=====================
-package_2: num_files_2
-=====================
-...
-=====================
-package_N: num_files_M
-=====================
+```
+{
+  package_1: num_files_1,
+  package_2: num_files_2,
+  ...
+  package_N: num_files_M
+}
+```
 
 In Python 3.6 the result dict will be insert ordered.
 
+Now we need to find top L biggest packages by number of their files...
