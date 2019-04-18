@@ -30,6 +30,8 @@ http://ftp.uk.debian.org/debian/dists/stable/main/Contents-amd64.gz
 
 ## File structure
 
+Despite debian docs say that the first row of the table SHOULD have the columns "FILE" and "LOCATION", this is not the case in Contents-amd64.gz. In fact, actual data goes straight away.
+
 ```
 bin/ash                                                 shells/ash
 bin/bash                                                shells/bash
@@ -79,7 +81,7 @@ $ cat Contents-arm64 | awk '{print $2}' | sort -u | wc -l
    53434
 ```
 
-# Task paraphrasing
+# Task paraphrasing and understanding
 
 Phrase "Top 10 packages that have the most files associated with them" means
 - we need to know how many files belong to packages
@@ -96,15 +98,15 @@ And as we go through the Contents index and our dict will be growing, lookup if 
 
 ```
 for each line:
-  if line.package_name in packages:
-    it means that we have already seen some files of this package
-    so we update dict `packages` and increment value by 1 of corresponding package
-    packages['line.package_name'] += 1
-  else:
+  if line.package_name not in packages:
     it means that we have not seen files belownging to this package yet
     we need to start counting the number of files for it.
     since this is a first file of this package we set count to 1
     packages['line.package_name'] = 1
+  else:
+    it means that we have already seen some files of this package
+    so we update dict `packages` and increment value by 1 of corresponding package
+    packages['line.package_name'] += 1
 ```
 
 In the end, our dict `packages` will have all the packages from Contents index and number of files for each of them
@@ -120,4 +122,8 @@ In the end, our dict `packages` will have all the packages from Contents index a
 
 In Python 3.6 the result dict will be insert ordered.
 
-Now we need to find top L biggest packages by number of their files...
+# Find top L biggest packages by number of their files
+
+We can do it do, e.g. by heapq.nlargest()
+Or we can do it via collections.Counter() but that uses heapq.nlargest() under the hood.
+
