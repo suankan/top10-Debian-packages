@@ -60,6 +60,34 @@ class ContentsIndex:
         Then result is... I need to think about it.
         '''
 
+        # Split space-separated raw line:
+        # 'bin/busybox        utils/busybox,shells/busybox-static'
+        # into list:
+        # ['bin/busybox', '       utils/busybox,shells/busybox-static']
+        raw_list = raw_line.split(" ", 1)
+
+        # Extract filename 'bin/busybox'
+        file = raw_list[0]
+
+        # From comma-separated string:
+        #   '       utils/busybox,shells/busybox-static'
+        # Extract packages list:
+        #   ['utils/busybox', 'shells/busybox-static']
+        packages = raw_list[1].strip().split(",")
+
+        # Set empty list for storing result which we will be
+        # populated with strings  and returned
+        result = []
+
+        # When this is a comma-separated packages list
+        for package in packages:
+            # Compose single-whitespace-separated string "file package"
+            fp_string = file + ' ' + package
+            # Add it to result list
+            result.append(fp_string)
+
+        return result
+
 
     def _get_contents_file(self):
         '''
