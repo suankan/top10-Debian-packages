@@ -119,28 +119,36 @@ class ContentsIndex:
             for chunk in response.iter_content(chunk_size=256):
                 file.write(chunk)
 
-    def _ungzip_contents_file(self):
-        '''
-        This function will unarchive gz contents file.
-        '''
-
-        # import gzip
-        # import shutil
-        # with gzip.open('file.txt.gz', 'rb') as f_in:
-        #   with open('file.txt', 'wb') as f_out:
-        #     shutil.copyfileobj(f_in, f_out)
-
     def get_packages_size(self):
         '''
         This function will actually scan the Contents index
         file and populate self._packages_size dict.
         '''
 
-        # for package in curr_packages:
-        #   if package not in _packages:
-        #     _packages[package] = 1
-        #   else:
-        #     _packages[package] += 1
+        with gzip.open(self._contents_index_filename, 'rb') as file:
+            for raw_line in file:
+                # Some observation I made: default data after gzip.open
+                # is byte type. Which is essentially Latin1.
+                # Converting it to utf-8 :)
+                raw_line = raw_line.decode('utf-8').strip()
+                # A line can be 'file  name    package1,package2,...,packageN'
+                # We will curate it via self.curate_line(raw_line)
+                for line in self.curate_line(raw_line):
+                    # After curating the second space-separated element
+                    # is always a single package name
+                    package = line[1]
+
+                    # Implementing algorithm described in readme.
+                    if package not in self._packages_size:
+                        # If package name does not found in dict
+                        # self._packages_size, this means we hit the first
+                        # file of this package.
+                        self._packages_size[package] = 1
+                    else:
+                        # If package name is found in dict
+                        # self._packages_size, this means we have faced this
+                        # file before, hence increment counter.
+                        self._packages_size[package] += 1
 
     def get_top(self, num):
         '''

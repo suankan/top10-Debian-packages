@@ -62,5 +62,27 @@ class ContentsIndexTests(unittest.TestCase):
 
         self.assertListEqual(expected_result, result)
 
+    def test_get_packages_size(self):
+        '''
+        Test case:
+        '''
+
+        # Setup test data
+        expected_result = {
+            'debian-installer/ca-certificates-udeb': 1,
+            'qwe/asd': 3,
+            'debian-installer/fonts-freefont-udeb': 1,
+            'debian-installer/ttf-freefont-udeb': 1,
+            'sound/zynaddsubfx-data': 1
+        }
+
+        test_Contents_file = 'Contents-test.gz'
+
+        my_contents_index = ContentsIndex('test')
+        my_contents_index.get_packages_size()
+
+        self.assertDictEqual(my_contents_index._packages_size, expected_result)
+
+
 if __name__ == '__main__':
     unittest.main()
