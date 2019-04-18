@@ -21,7 +21,7 @@ pkg_width = max(len(str(line[0])) for line in top_10) + 2
 num_width = max(len(str(line[1])) for line in top_10) + 2
 # Print header according to calulated column widths
 print('{:<5} {:<{pkg_width}} {:>{num_width}}'.format(
-    'Top_N', 'Debian package', 'Num files',
+    'TOP_N', 'DEBIAN PACKAGE', 'NUM FILES',
     pkg_width=pkg_width, num_width=num_width))
 
 num = 1

@@ -19,7 +19,7 @@ Execute it with specifying arch as a positional arg cmd option e.g. amd64, arm64
 
 ```bash
 $ python3 ./package_statistics.py i386
-Top_N Debian package               Num files
+TOP_N DEBIAN PACKAGE               NUM FILES
 1.    x11/numix-icon-theme           68920
 2.    games/flightgear-data-base     64707
 3.    fonts/texlive-fonts-extra      45910
