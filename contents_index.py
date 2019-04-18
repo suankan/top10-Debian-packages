@@ -2,6 +2,7 @@
 This module makes some interface and tooling backend to work with Debian Contents indexes.
 '''
 
+import requests
 
 class ContentsIndex:
     '''
@@ -31,6 +32,23 @@ class ContentsIndex:
         '''
         This is a constructor for this class.
         '''
+
+        # For simplicity we will use just a single debian mirror
+        # and just fail if it not available.
+        self._debian_mirror = 'http://ftp.debian.org/debian/dists/stable/main'
+        self.arch = arch
+        self._contents_index_filename = 'Contents-' + self.arch + '.gz'
+        self._contents_index_file_url = \
+            self._debian_mirror + '/' + self._contents_index_filename
+
+        # This dict will store number of files in each package:
+        # {
+        #   package_0: number_of_files_0,
+        #   package_1: number_of_files_1,
+        #   ...
+        #   package_N: number_of_files_N,
+        # }
+        self._packages_size = {}
 
     @staticmethod
     def curate_line(raw_line):
@@ -88,13 +106,19 @@ class ContentsIndex:
 
         return result
 
-
-    def _get_contents_file(self):
+    def download_contents_index(self):
         '''
-        This function will download Contents index file
-        from Debian repo for a given architecture.
+        This function will download Contents index file from Debian repo
+        for a given architecture and save it in the current directory.
         E.g. http://ftp.debian.org/debian/dists/stable/main/Contents-amd64.gz
         '''
+
+        # Download gzipped file from Debian mirror and
+        # save it in the currenrt directory
+        response = requests.get(self._contents_index_file_url, stream=True)
+        with open(self._contents_index_filename, 'wb') as f:
+            for chunk in response.iter_content(chunk_size=256):
+                f.write(chunk)
 
     def _ungzip_contents_file(self):
         '''
