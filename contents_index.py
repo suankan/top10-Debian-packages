@@ -4,6 +4,7 @@ This module makes some interface and tooling backend to work with Debian Content
 
 import gzip
 import requests
+from heapq import nlargest
 
 class ContentsIndex:
     '''
@@ -153,11 +154,8 @@ class ContentsIndex:
 
     def get_top(self, num):
         '''
-        This function will get top n packages from
+        This function will get top num packages from
         the obtained self._packages_size dict
         '''
 
-        # from heapq import nlargest
-        # from collections import Counter
-        # print heapq.nlargest(n, packages.items(), key=lambda i: i[1])
-        # print Counter(packages).most_common(10)
+        return nlargest(num, self._packages_size.items(), key=lambda i: i[1])
