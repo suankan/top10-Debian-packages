@@ -2,6 +2,7 @@
 This module makes some interface and tooling backend to work with Debian Contents indexes.
 '''
 
+import gzip
 import requests
 
 class ContentsIndex:
