@@ -116,9 +116,9 @@ class ContentsIndex:
         # Download gzipped file from Debian mirror and
         # save it in the currenrt directory
         response = requests.get(self._contents_index_file_url, stream=True)
-        with open(self._contents_index_filename, 'wb') as f:
+        with open(self._contents_index_filename, 'wb') as file:
             for chunk in response.iter_content(chunk_size=256):
-                f.write(chunk)
+                file.write(chunk)
 
     def _ungzip_contents_file(self):
         '''
