@@ -2,9 +2,9 @@
 This module makes some interface and tooling backend to work with Debian Contents indexes.
 '''
 
+from heapq import nlargest
 import gzip
 import requests
-from heapq import nlargest
 
 class ContentsIndex:
     '''
@@ -121,7 +121,7 @@ class ContentsIndex:
             for chunk in response.iter_content(chunk_size=256):
                 file.write(chunk)
 
-    def get_packages_size(self):
+    def calc_packages_size(self):
         '''
         This function will actually scan the Contents index
         file and populate self._packages_size dict.

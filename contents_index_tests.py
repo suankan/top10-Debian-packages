@@ -3,7 +3,6 @@ Unit tests for articles modules
 '''
 
 import unittest
-# from testfixtures import compare
 from contents_index import ContentsIndex
 
 
@@ -62,7 +61,7 @@ class ContentsIndexTests(unittest.TestCase):
 
         self.assertListEqual(expected_result, result)
 
-    def test_get_packages_size(self):
+    def test_calc_packages_size(self):
         '''
         Test case:
         '''
@@ -76,10 +75,10 @@ class ContentsIndexTests(unittest.TestCase):
             'sound/zynaddsubfx-data': 1
         }
 
-        test_Contents_file = 'Contents-test.gz'
-
         my_contents_index = ContentsIndex('test')
-        my_contents_index.get_packages_size()
+        # A sample of Contents-test.gz is prepared and placed
+        # in the current directory
+        my_contents_index.calc_packages_size()
 
         self.assertDictEqual(my_contents_index._packages_size, expected_result)
 
