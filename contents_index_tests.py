@@ -21,8 +21,8 @@ class ContentsIndexTests(unittest.TestCase):
         # Setup the test data
         raw_line = 'bin/busybox        utils/busybox,shells/busybox-static'
         expected_result = [
-            'bin/busybox utils/busybox',
-            'bin/busybox shells/busybox-static',
+            ['bin/busybox', 'utils/busybox'],
+            ['bin/busybox', 'shells/busybox-static'],
         ]
 
         result = ContentsIndex.curate_line(raw_line)
@@ -37,7 +37,9 @@ class ContentsIndexTests(unittest.TestCase):
 
         # Setup the test data
         raw_line = 'bin/busybox        utils/busybox'
-        expected_result = ['bin/busybox utils/busybox']
+        expected_result = [
+            ['bin/busybox', 'utils/busybox']
+        ]
 
         result = ContentsIndex.curate_line(raw_line)
 

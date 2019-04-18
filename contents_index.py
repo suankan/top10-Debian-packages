@@ -100,9 +100,9 @@ class ContentsIndex:
         # When this is a comma-separated packages list
         for package in packages:
             # Compose single-whitespace-separated string "file package"
-            fp_string = file + ' ' + package
+            fp = [file, package]
             # Add it to result list
-            result.append(fp_string)
+            result.append(fp)
 
         return result
 
