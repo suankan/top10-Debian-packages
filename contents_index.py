@@ -79,30 +79,29 @@ class ContentsIndex:
         '''
 
         # Split space-separated raw line:
-        # 'bin/busybox        utils/busybox,shells/busybox-static'
+        # 'bin/busy box        utils/busybox,shells/busybox-static'
         # into list:
-        # ['bin/busybox', '       utils/busybox,shells/busybox-static']
-        raw_list = raw_line.split(" ", 1)
+        # ['bin/busy box       ', ' ', 'utils/busybox,shells/busybox-static']
+        raw_list = raw_line.rpartition(" ")
 
-        # Extract filename 'bin/busybox'
-        file = raw_list[0]
+        # First element will always be filename
+        file = raw_list[0].strip()
 
+        # Third element will always be comma-separated list of packages
         # From comma-separated string:
         #   '       utils/busybox,shells/busybox-static'
         # Extract packages list:
         #   ['utils/busybox', 'shells/busybox-static']
-        packages = raw_list[1].strip().split(",")
+        packages = raw_list[2].split(",")
 
         # Set empty list for storing result which we will be
-        # populated with strings  and returned
+        # populated with strings and returned
         result = []
 
         # When this is a comma-separated packages list
         for package in packages:
-            # Compose single-whitespace-separated string "file package"
-            fp = [file, package]
-            # Add it to result list
-            result.append(fp)
+            # Add list [file, package] to result list
+            result.append([file, package])
 
         return result
 
