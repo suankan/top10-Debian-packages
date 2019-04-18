@@ -1,25 +1,33 @@
 #!/usr/local/bin/python
-import heapq
-from collections import Counter
+import argparse
+from contents_index import ContentsIndex
 
-packages = {}
+parser = argparse.ArgumentParser()
+parser.add_argument(
+    "arch", help="Arch of Debian Contents index \
+        e.g. Contents-amd64.gz in Contents-amd64.gz")
+args = parser.parse_args()
 
-# return an object {filename,package}
-def parse_line():
-  pass
+# Get the Contents index file for a given arch
+my_contents_index = ContentsIndex(args.arch)
+my_contents_index.download_contents_index()
+my_contents_index.calc_packages_size()
+# Get 10 biggest packages by nuber of files
+top_10 = my_contents_index.get_top(10)
 
-with open('tmp/Contents-amd64') as file:
-  for line in file:
-    line_pair = line.split(" ", 1)
-    filename = line_pair[0]
-    package = line_pair[1]
-    if package not in packages:
-      packages[package] = 1
-    else:
-      packages[package] += 1
+# Prepare to print the obtained stats.
+# Calc widths of each column.
+pkg_width = max(len(str(line[0])) for line in top_10) + 2
+num_width = max(len(str(line[1])) for line in top_10) + 2
+# Print header according to calulated column widths
+print('{:<5} {:<{pkg_width}} {:>{num_width}}'.format(
+    'Top_N', 'Debian package', 'Num files',
+    pkg_width=pkg_width, num_width=num_width))
 
-n = 10
-
-print heapq.nlargest(n, packages.items(), key=lambda i: i[1])
-
-print Counter(packages).most_common(10)
+num = 1
+for item in top_10:
+    # Print each stat according to calulated column widths
+    print('{:<5} {:<{pkg_width}} {:>{num_width}}'.format(
+        str(num) + '.', item[0], item[1],
+        pkg_width=pkg_width, num_width=num_width))
+    num += 1

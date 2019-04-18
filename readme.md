@@ -11,6 +11,48 @@ This is a python command line tool that takes the architecture (amd64, arm64, mi
 10. <package name 10>         <number of files>
 ```
 
+# How to use this tool
+
+## Run the tool
+
+Execute it with specifying arch as a positional arg cmd option e.g. amd64, arm64, armel, armhf, i386 etc.
+
+```bash
+$ python3 ./package_statistics.py i386
+Top_N Debian package               Num files
+1.    x11/numix-icon-theme           68920
+2.    games/flightgear-data-base     64707
+3.    fonts/texlive-fonts-extra      45910
+4.    rust/rust-doc                  45641
+5.    doc/trilinos-doc               45567
+6.    games/widelands-data           34985
+7.    misc/moka-icon-theme           32533
+8.    doc/vtk6-doc                   29464
+9.    gnome/faenza-icon-theme        29400
+10.   fonts/fonts-mathjax-extras     29035
+```
+
+The utility does:
+- Download corresponding Contents index file from Debian repo e.g. http://ftp.debian.org/debian/dists/stable/main/Contents-i386.gz
+- Parse content as described below.
+- Find out and list top 10 biggest packages for this architechture.
+
+## Run unit tests
+
+You can also execute unit tests and see how they go:
+```bash
+$ python3 ./contents_index_tests.py -v
+test_calc_packages_size (__main__.ContentsIndexTests) ... ok
+test_curate_line_filename_with_whitespaces (__main__.ContentsIndexTests) ... ok
+test_curate_line_one_file_many_pkg (__main__.ContentsIndexTests) ... ok
+test_curate_line_one_file_one_pkg (__main__.ContentsIndexTests) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.004s
+
+OK
+```
+
 # "Contents" indices
 
 From [here](https://wiki.debian.org/DebianRepository/Format?action=show&redirect=RepositoryFormat#A.22Contents.22_indices)
@@ -125,5 +167,5 @@ In Python 3.6 the result dict will be insert ordered.
 # Find top L biggest packages by number of their files
 
 We can do it do, e.g. by heapq.nlargest()
-Or we can do it via collections.Counter() but that uses heapq.nlargest() under the hood.
 
+Or we can do it via collections.Counter() but that uses heapq.nlargest() under the hood.
